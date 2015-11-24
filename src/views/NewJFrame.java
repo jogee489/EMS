@@ -33,6 +33,7 @@ public class NewJFrame extends javax.swing.JFrame {
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
+        bindingGroup = new org.jdesktop.beansbinding.BindingGroup();
 
         editButton = new javax.swing.JButton();
         viewButton = new javax.swing.JButton();
@@ -57,7 +58,7 @@ public class NewJFrame extends javax.swing.JFrame {
         reportEmergencyButton1 = new javax.swing.JButton();
         emergencyList = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
-        activeEmergencyList = new javax.swing.JList();
+        jList1 = new javax.swing.JList<>();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -69,7 +70,10 @@ public class NewJFrame extends javax.swing.JFrame {
 
         emergencyLocationDetailLabel.setText("Emergency Location");
 
-        emergencyTypeDetail.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        emergencyTypeDetail.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Fire", "Violence", "Medical", "Other" }));
+
+        org.jdesktop.beansbinding.Binding binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, jList1, org.jdesktop.beansbinding.ELProperty.create("${selectedElement.callerName}"), callerNameDetail, org.jdesktop.beansbinding.BeanProperty.create("text"));
+        bindingGroup.addBinding(binding);
 
         callerNameDetailLabel.setText("Caller Name");
 
@@ -195,25 +199,25 @@ public class NewJFrame extends javax.swing.JFrame {
 
         emergencyList.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(0, 0, 0), 1, true));
 
-        activeEmergencyList.setModel(new javax.swing.AbstractListModel() {
-            //String[] strings = { "Item 1", "Item 2", "Item 3", "Item 4", "Item 5" };
-            Object [] activeEmergencies = emergencyController.getActiveEmergencies().toArray();
-            public int getSize() { return activeEmergencies.length; }
-            public Object getElementAt(int i) { return activeEmergencies[i]; }
+        jList1.setModel(listModel);
+        jList1.addListSelectionListener(new javax.swing.event.ListSelectionListener() {
+            public void valueChanged(javax.swing.event.ListSelectionEvent evt) {
+                emergencyListSelected(evt);
+            }
         });
-        jScrollPane1.setViewportView(activeEmergencyList);
+        jScrollPane1.setViewportView(jList1);
 
         javax.swing.GroupLayout emergencyListLayout = new javax.swing.GroupLayout(emergencyList);
         emergencyList.setLayout(emergencyListLayout);
         emergencyListLayout.setHorizontalGroup(
             emergencyListLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jScrollPane1, javax.swing.GroupLayout.Alignment.TRAILING)
+            .addComponent(jScrollPane1)
         );
         emergencyListLayout.setVerticalGroup(
             emergencyListLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, emergencyListLayout.createSequentialGroup()
-                .addGap(0, 0, Short.MAX_VALUE)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+            .addGroup(emergencyListLayout.createSequentialGroup()
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 0, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -251,6 +255,8 @@ public class NewJFrame extends javax.swing.JFrame {
                 .addContainerGap())
         );
 
+        bindingGroup.bind();
+
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
@@ -263,10 +269,8 @@ public class NewJFrame extends javax.swing.JFrame {
         Emergency emergency = emergencyController.createEmergency(type, name, phone, location);
         // TODO pop up to state emergency created
         // TODO update EmergencyList
-        DefaultListModel model = new DefaultListModel();
-        model.addElement(emergency);
-        //model.addElement("two");
-        activeEmergencyList = new JList(model);
+        listModel.add(index++, emergency);
+        //activeEmergencyList = new JList(model);
         //activeEmergencyList.repaint();
         
         // Reset the text fields.
@@ -274,6 +278,16 @@ public class NewJFrame extends javax.swing.JFrame {
         callerPhone.setText(null);
         emergencyLocation.setText(null);
     }//GEN-LAST:event_reportEmergencyButton1MouseClicked
+
+    private void emergencyListSelected(javax.swing.event.ListSelectionEvent evt) {//GEN-FIRST:event_emergencyListSelected
+        // TODO add your handling code here:
+        Emergency emergencyInstance = (Emergency)jList1.getSelectedValue();
+        callerNameDetail.setText(emergencyInstance.getCallerName());
+        callerPhoneDetail.setText(emergencyInstance.getCallerPhone());
+        emergencyTypeDetail.setSelectedItem(emergencyInstance.getType());
+        emergencyLocationDetail.setText(emergencyInstance.getLocation());
+        
+    }//GEN-LAST:event_emergencyListSelected
 
     /**
      * @param args the command line arguments
@@ -309,9 +323,10 @@ public class NewJFrame extends javax.swing.JFrame {
             }
         });
     }
-
+ 
+    private DefaultListModel<Emergency> listModel = new DefaultListModel<>();
+    private int index = 0;
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JList activeEmergencyList;
     private javax.swing.JTextField callerName;
     private javax.swing.JTextField callerNameDetail;
     private javax.swing.JLabel callerNameDetailLabel;
@@ -332,8 +347,10 @@ public class NewJFrame extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabel8;
+    private javax.swing.JList jList1;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JButton reportEmergencyButton1;
     private javax.swing.JButton viewButton;
+    private org.jdesktop.beansbinding.BindingGroup bindingGroup;
     // End of variables declaration//GEN-END:variables
 }

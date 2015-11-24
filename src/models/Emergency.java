@@ -44,6 +44,22 @@ public class Emergency {
         System.out.println(this);
     }
     
+    public String getType() {
+        return type;
+    }
+    
+    public String getCallerName() {
+        return callerName;
+    }
+    
+    public String getCallerPhone() {
+        return callerPhone;
+    }
+    
+    public String getLocation() {
+        return location;
+    }
+    
     public Boolean isResolved() {
         return resolved;
     }
