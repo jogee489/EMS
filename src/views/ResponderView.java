@@ -16,13 +16,13 @@ import models.Emergency;
  *
  * @author dorkoj
  */
-public class NewJFrame extends javax.swing.JFrame {
+public class ResponderView extends javax.swing.JFrame {
 
     EmergencyController emergencyController = new EmergencyController();
     /**
      * Creates new form NewJFrame
      */
-    public NewJFrame() {
+    public ResponderView() {
         initComponents();
     }
 
@@ -35,7 +35,7 @@ public class NewJFrame extends javax.swing.JFrame {
     private void initComponents() {
         bindingGroup = new org.jdesktop.beansbinding.BindingGroup();
 
-        emergencyDetails = new javax.swing.JPanel();
+        emergencyDetailsPanel = new javax.swing.JPanel();
         emergencyLocationDetailLabel = new javax.swing.JLabel();
         emergencyTypeDetail = new javax.swing.JComboBox();
         callerNameDetail = new javax.swing.JTextField();
@@ -55,8 +55,8 @@ public class NewJFrame extends javax.swing.JFrame {
         emergencyLocation = new javax.swing.JTextField();
         reportEmergencyButton1 = new javax.swing.JButton();
         emergencyList = new javax.swing.JPanel();
-        emergencyListPane = new javax.swing.JScrollPane();
-        activeEmergencyList = new javax.swing.JList<>();
+        emergencyListPanel = new javax.swing.JScrollPane();
+        jList1 = new javax.swing.JList<>();
         jMenuBar1 = new javax.swing.JMenuBar();
         viewMenu = new javax.swing.JMenu();
         dispatchViewMenuItem = new javax.swing.JMenuItem();
@@ -66,13 +66,13 @@ public class NewJFrame extends javax.swing.JFrame {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
-        emergencyDetails.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(0, 0, 0), 1, true));
+        emergencyDetailsPanel.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(0, 0, 0), 1, true));
 
         emergencyLocationDetailLabel.setText("Emergency Location");
 
         emergencyTypeDetail.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Fire", "Criminal", "Medical", "Other" }));
 
-        org.jdesktop.beansbinding.Binding binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, activeEmergencyList, org.jdesktop.beansbinding.ELProperty.create("${selectedElement.callerName}"), callerNameDetail, org.jdesktop.beansbinding.BeanProperty.create("text"));
+        org.jdesktop.beansbinding.Binding binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, jList1, org.jdesktop.beansbinding.ELProperty.create("${selectedElement.callerName}"), callerNameDetail, org.jdesktop.beansbinding.BeanProperty.create("text"));
         bindingGroup.addBinding(binding);
 
         callerNameDetailLabel.setText("Caller Name");
@@ -81,46 +81,46 @@ public class NewJFrame extends javax.swing.JFrame {
 
         emergencyTypeDetailLabel.setText("Emergency Type");
 
-        javax.swing.GroupLayout emergencyDetailsLayout = new javax.swing.GroupLayout(emergencyDetails);
-        emergencyDetails.setLayout(emergencyDetailsLayout);
-        emergencyDetailsLayout.setHorizontalGroup(
-            emergencyDetailsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(emergencyDetailsLayout.createSequentialGroup()
+        javax.swing.GroupLayout emergencyDetailsPanelLayout = new javax.swing.GroupLayout(emergencyDetailsPanel);
+        emergencyDetailsPanel.setLayout(emergencyDetailsPanelLayout);
+        emergencyDetailsPanelLayout.setHorizontalGroup(
+            emergencyDetailsPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(emergencyDetailsPanelLayout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(emergencyDetailsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(emergencyDetailsLayout.createSequentialGroup()
-                        .addGroup(emergencyDetailsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(emergencyDetailsPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(emergencyDetailsPanelLayout.createSequentialGroup()
+                        .addGroup(emergencyDetailsPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(callerNameDetailLabel)
                             .addComponent(callerPhoneDetailLabel)
                             .addComponent(emergencyTypeDetailLabel))
                         .addGap(42, 42, 42))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, emergencyDetailsLayout.createSequentialGroup()
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, emergencyDetailsPanelLayout.createSequentialGroup()
                         .addComponent(emergencyLocationDetailLabel)
                         .addGap(18, 18, 18)))
-                .addGroup(emergencyDetailsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                .addGroup(emergencyDetailsPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(emergencyLocationDetail, javax.swing.GroupLayout.DEFAULT_SIZE, 145, Short.MAX_VALUE)
                     .addComponent(callerPhoneDetail, javax.swing.GroupLayout.DEFAULT_SIZE, 145, Short.MAX_VALUE)
                     .addComponent(callerNameDetail, javax.swing.GroupLayout.DEFAULT_SIZE, 145, Short.MAX_VALUE)
                     .addComponent(emergencyTypeDetail, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap(51, Short.MAX_VALUE))
         );
-        emergencyDetailsLayout.setVerticalGroup(
-            emergencyDetailsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(emergencyDetailsLayout.createSequentialGroup()
+        emergencyDetailsPanelLayout.setVerticalGroup(
+            emergencyDetailsPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(emergencyDetailsPanelLayout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(emergencyDetailsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                .addGroup(emergencyDetailsPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(callerNameDetail, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(callerNameDetailLabel))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(emergencyDetailsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                .addGroup(emergencyDetailsPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(callerPhoneDetail, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(callerPhoneDetailLabel))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(emergencyDetailsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                .addGroup(emergencyDetailsPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(emergencyTypeDetail, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(emergencyTypeDetailLabel))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(emergencyDetailsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                .addGroup(emergencyDetailsPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(emergencyLocationDetail, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(emergencyLocationDetailLabel))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
@@ -199,23 +199,23 @@ public class NewJFrame extends javax.swing.JFrame {
 
         emergencyList.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(0, 0, 0), 1, true));
 
-        activeEmergencyList.setModel(listModel);
-        activeEmergencyList.addListSelectionListener(new javax.swing.event.ListSelectionListener() {
+        jList1.setModel(listModel);
+        jList1.addListSelectionListener(new javax.swing.event.ListSelectionListener() {
             public void valueChanged(javax.swing.event.ListSelectionEvent evt) {
                 emergencyListSelected(evt);
             }
         });
-        emergencyListPane.setViewportView(activeEmergencyList);
+        emergencyListPanel.setViewportView(jList1);
 
         javax.swing.GroupLayout emergencyListLayout = new javax.swing.GroupLayout(emergencyList);
         emergencyList.setLayout(emergencyListLayout);
         emergencyListLayout.setHorizontalGroup(
             emergencyListLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(emergencyListPane)
+            .addComponent(emergencyListPanel)
         );
         emergencyListLayout.setVerticalGroup(
             emergencyListLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(emergencyListPane, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 206, Short.MAX_VALUE)
+            .addComponent(emergencyListPanel, javax.swing.GroupLayout.DEFAULT_SIZE, 205, Short.MAX_VALUE)
         );
 
         viewMenu.setText("Views");
@@ -256,7 +256,7 @@ public class NewJFrame extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(emergencyList, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(emergencyDetails, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(emergencyDetailsPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
@@ -266,9 +266,9 @@ public class NewJFrame extends javax.swing.JFrame {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addComponent(emergencyFormPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addGroup(layout.createSequentialGroup()
-                        .addComponent(emergencyList, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(emergencyList, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(emergencyDetails, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                        .addComponent(emergencyDetailsPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap())
         );
 
@@ -298,7 +298,7 @@ public class NewJFrame extends javax.swing.JFrame {
 
     private void emergencyListSelected(javax.swing.event.ListSelectionEvent evt) {//GEN-FIRST:event_emergencyListSelected
         // TODO add your handling code here:
-        Emergency emergencyInstance = (Emergency)activeEmergencyList.getSelectedValue();
+        Emergency emergencyInstance = (Emergency)jList1.getSelectedValue();
         callerNameDetail.setText(emergencyInstance.getCallerName());
         callerPhoneDetail.setText(emergencyInstance.getCallerPhone());
         emergencyTypeDetail.setSelectedItem(emergencyInstance.getType());
@@ -306,13 +306,13 @@ public class NewJFrame extends javax.swing.JFrame {
         
     }//GEN-LAST:event_emergencyListSelected
 
-    private void responderViewMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_responderViewMenuItemActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_responderViewMenuItemActionPerformed
-
     private void dispatchViewMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_dispatchViewMenuItemActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_dispatchViewMenuItemActionPerformed
+
+    private void responderViewMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_responderViewMenuItemActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_responderViewMenuItemActionPerformed
 
     /**
      * @param args the command line arguments
@@ -330,21 +330,19 @@ public class NewJFrame extends javax.swing.JFrame {
                     break;
                 }
             }
-        } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(NewJFrame.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(NewJFrame.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(NewJFrame.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(NewJFrame.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        } catch (ClassNotFoundException | InstantiationException | IllegalAccessException | javax.swing.UnsupportedLookAndFeelException ex) {
+            java.util.logging.Logger.getLogger(ResponderView.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
+        //</editor-fold>
+        //</editor-fold>
+        
+        //</editor-fold>
         //</editor-fold>
 
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new NewJFrame().setVisible(true);
+                new ResponderView().setVisible(true);
             }
         });
     }
@@ -352,7 +350,6 @@ public class NewJFrame extends javax.swing.JFrame {
     private DefaultListModel<Emergency> listModel = new DefaultListModel<>();
     private int index = 0;
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JList activeEmergencyList;
     private javax.swing.JMenuItem adminViewMenuItem;
     private javax.swing.JTextField callerName;
     private javax.swing.JTextField callerNameDetail;
@@ -362,10 +359,10 @@ public class NewJFrame extends javax.swing.JFrame {
     private javax.swing.JLabel callerPhoneDetailLabel;
     private javax.swing.JMenuItem dispatchViewMenuItem;
     private javax.swing.JMenu editMenu;
-    private javax.swing.JPanel emergencyDetails;
+    private javax.swing.JPanel emergencyDetailsPanel;
     private javax.swing.JPanel emergencyFormPanel;
     private javax.swing.JPanel emergencyList;
-    private javax.swing.JScrollPane emergencyListPane;
+    private javax.swing.JScrollPane emergencyListPanel;
     private javax.swing.JTextField emergencyLocation;
     private javax.swing.JTextField emergencyLocationDetail;
     private javax.swing.JLabel emergencyLocationDetailLabel;
@@ -376,6 +373,7 @@ public class NewJFrame extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabel8;
+    private javax.swing.JList jList1;
     private javax.swing.JMenuBar jMenuBar1;
     private javax.swing.JButton reportEmergencyButton1;
     private javax.swing.JMenuItem responderViewMenuItem;

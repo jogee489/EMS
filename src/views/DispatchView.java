@@ -19,6 +19,40 @@ import models.Emergency;
  * @author dorkoj
  */
 public class DispatchView extends javax.swing.JFrame {
+    
+    // Variables declaration  
+    private DefaultListModel<Emergency> listModel = new DefaultListModel<>();
+    private int index = 0;
+    private org.jdesktop.beansbinding.BindingGroup bindingGroup;
+    private JList activeEmergencyList;
+    // New emergency form
+    private JTextField callerName = new JTextField();
+    private JTextField callerPhone = new JTextField();
+    
+    
+    // Emergency details.
+    private JTextField callerNameDetail = new JTextField();
+    private JTextField callerPhoneDetail = new JTextField();
+    private JLabel callerNameDetailLabel = new JLabel();
+    private JLabel callerPhoneDetailLabel = new JLabel();
+    private JButton editButton;
+    private JPanel emergencyDetails;
+    private JPanel emergencyForm;
+    private JPanel emergencyList;
+    private JTextField emergencyLocation = new JTextField();
+    private JTextField emergencyLocationDetail = new JTextField();
+    private JLabel emergencyLocationDetailLabel = new JLabel();
+    private JComboBox emergencyType;
+    private JComboBox emergencyTypeDetail;
+    private JLabel emergencyTypeDetailLabel = new JLabel();
+    private JLabel jLabel5 = new JLabel();
+    private JLabel jLabel6 = new JLabel();
+    private JLabel jLabel7 = new JLabel();
+    private JLabel jLabel8 = new JLabel();
+    private JScrollPane jScrollPane1;
+    private JButton reportEmergencyButton1;
+    private JButton viewButton;
+    // End of variables declaration  
 
     EmergencyController emergencyController = new EmergencyController();
     /**
@@ -35,9 +69,10 @@ public class DispatchView extends javax.swing.JFrame {
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">                          
     private void initComponents() {
-
+        
         editButton = new JButton();
         viewButton = new JButton();
+        
         emergencyDetails = new JPanel();
         emergencyLocationDetailLabel = new JLabel();
         emergencyTypeDetail = new JComboBox();
@@ -68,15 +103,11 @@ public class DispatchView extends javax.swing.JFrame {
         viewButton.setText("View");
 
         emergencyDetails.setBorder(new LineBorder(new Color(0, 0, 0), 1, true));
-
         emergencyLocationDetailLabel.setText("Emergency Location");
         // TODO: this needs to be changed
         emergencyTypeDetail.setModel(new DefaultComboBoxModel(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
-
         callerNameDetailLabel.setText("Caller Name");
-
         callerPhoneDetailLabel.setText("Caller Phone #");
-
         emergencyTypeDetailLabel.setText("Emergency Type");
 
         javax.swing.GroupLayout emergencyDetailsLayout = new javax.swing.GroupLayout(emergencyDetails);
@@ -202,8 +233,7 @@ public class DispatchView extends javax.swing.JFrame {
             public int getSize() { return strings.length; }
             public Object getElementAt(int i) { return strings[i]; }
         });*/
-        activeEmergencyList = new JList(emergencyController.getActiveEmergencies().toArray());
-        DefaultListModel<Emergency> listModel = new DefaultListModel<>();
+        //activeEmergencyList = new JList(emergencyController.getActiveEmergencies().toArray());
         JList<Emergency> list = new JList<>(listModel);
         jScrollPane1.setViewportView(list);
 
@@ -267,7 +297,7 @@ public class DispatchView extends javax.swing.JFrame {
         Emergency emergency = emergencyController.createEmergency(type, name, phone, location);
         // TODO pop up to state emergency created
         // TODO update EmergencyList
-        
+        listModel.add(index++, emergency);
         
         // Reset the text fields.
         callerName.setText(null);
@@ -310,30 +340,4 @@ public class DispatchView extends javax.swing.JFrame {
         });
     }
 
-    // Variables declaration - do not modify                     
-    private JList activeEmergencyList;
-    private JTextField callerName;
-    private JTextField callerNameDetail;
-    private JLabel callerNameDetailLabel;
-    private JTextField callerPhone;
-    private JTextField callerPhoneDetail;
-    private JLabel callerPhoneDetailLabel;
-    private JButton editButton;
-    private JPanel emergencyDetails;
-    private JPanel emergencyForm;
-    private JPanel emergencyList;
-    private JTextField emergencyLocation;
-    private JTextField emergencyLocationDetail;
-    private JLabel emergencyLocationDetailLabel;
-    private JComboBox emergencyType;
-    private JComboBox emergencyTypeDetail;
-    private JLabel emergencyTypeDetailLabel;
-    private JLabel jLabel5;
-    private JLabel jLabel6;
-    private JLabel jLabel7;
-    private JLabel jLabel8;
-    private JScrollPane jScrollPane1;
-    private JButton reportEmergencyButton1;
-    private JButton viewButton;
-    // End of variables declaration                   
 }
