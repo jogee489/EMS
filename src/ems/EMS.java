@@ -5,6 +5,10 @@
  */
 package ems;
 
+import java.sql.*;
+import java.sql.DriverManager;
+import java.sql.SQLException;
+
 /**
  *
  * @author dorkoj
@@ -16,6 +20,20 @@ public class EMS {
      */
     public static void main(String[] args) {
         // TODO code application logic here
+        String url = "jdbc:sqlite:ems";
+        //String username = "user";
+        //String password = "password";
+
+        System.out.println("Connecting database...");
+        try {
+            Class.forName("org.sqlite.JDBC");
+            Connection connection = (Connection) DriverManager.getConnection(url);
+            System.out.println("Database connected!");
+        } catch (SQLException e) {
+            throw new IllegalStateException("Cannot connect the database!", e);
+        } catch (Exception e) {
+            System.out.println("Class error has occured: " + e);
+        }
     }
     
 }
