@@ -13,12 +13,25 @@ import java.util.List;
  * @author dorkoj
  */
 public class Responder {
+    private int id;
+    private String type;
     private String name;
     private String location;
-    private String type;
     private ArrayList<Emergency> emergencyList;
     
-    public Responder(String name, String location, String type) {
+    //Blank Constructor
+    public Responder(){}
+    
+    /**
+     * Full constructor for a new Responder object
+     * 
+     * @param id idnumber of the responder.
+     * @param name name of the responder.
+     * @param location the address of the responder.
+     * @param type the type of emergencies the responder can resolve.
+     */
+    public Responder(int id, String type, String name, String location) {
+        this.id = id;
         this.name = name;
         this.location = location;
         this.type = type;
@@ -64,5 +77,21 @@ public class Responder {
             }
         }
         return activeEmergencies;
+    }
+    /**
+     * Generate a string to be used to insert the responder into the database.
+     * @return a string used by sql to create the responder.
+     */
+    public String insertString() {
+        String data = id + ", '" +
+                      type + "', '" +
+                      name + "', '" +
+                      location + "'";
+                
+        return data;
+    }
+    @Override
+    public String toString() {
+        return "#" + id + "\t" + type + "\t" + name + "\t" + location;
     }
 }
