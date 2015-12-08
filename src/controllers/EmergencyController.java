@@ -20,7 +20,7 @@ public class EmergencyController {
     
     
     public Emergency createEmergency(String type, String callerName, String callerPhone, String location) {
-        emergencyInstance = new Emergency(++idCounter, type, callerName, callerPhone, location);
+        emergencyInstance = new Emergency(type, callerName, callerPhone, location);
         emergencyList.add(emergencyInstance);
         return emergencyInstance;
     }

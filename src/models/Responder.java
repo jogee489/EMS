@@ -5,6 +5,7 @@
  */
 package models;
 
+import ems.DatabaseSetup;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -13,6 +14,7 @@ import java.util.List;
  * @author dorkoj
  */
 public class Responder {
+    public static int index = 0;
     private int id;
     private String type;
     private String name;
@@ -23,7 +25,20 @@ public class Responder {
     public Responder(){}
     
     /**
-     * Full constructor for a new Responder object
+     * Constructor for creating a new Responder object
+     * 
+     * @param name name of the responder.
+     * @param location the address of the responder.
+     * @param type the type of emergencies the responder can resolve.
+     */
+    public Responder(String type, String name, String location) {
+        this.name = name;
+        this.location = location;
+        this.type = type;
+    }
+    
+    /**
+     * Full constructor for pulling in Responder objects
      * 
      * @param id idnumber of the responder.
      * @param name name of the responder.
@@ -37,6 +52,12 @@ public class Responder {
         this.type = type;
     }
     
+    public static void initializeIndex() {
+        DatabaseSetup.getHighestId("Responder");
+    }
+    public int getId() {
+        return id;
+    }
     public String getName() {
         return name;
     }
@@ -93,5 +114,11 @@ public class Responder {
     @Override
     public String toString() {
         return "#" + id + "\t" + type + "\t" + name + "\t" + location;
+    }
+    
+    public void save() {
+        id = ++index;
+        DatabaseSetup.saveResponder(this);
+        System.out.println("Responder " + id + " created");
     }
 }

@@ -7,12 +7,15 @@ package models;
 
 import ems.DatabaseSetup;
 import org.joda.time.DateTime;
+import org.joda.time.format.DateTimeFormat;
+import org.joda.time.format.DateTimeFormatter;
 /**
  *
  * @author dorkoj
  */
 public class Emergency {
-    
+    public final static DateTimeFormatter dtf = DateTimeFormat.forPattern("MM/dd/yyyy");
+    public static int index = 0;
     private int id;
     private String type;
     private String callerName;
@@ -21,20 +24,19 @@ public class Emergency {
     private boolean resolved;
     DateTime dateCreated;
     DateTime dateResolved;
+    Responder responder;
     
     // Blank Constructor
     public Emergency(){}
     
     /**
-     * Constructor for the Emergency method.
-     * @param id Identification number
+     * Constructor for the Emergency object.
      * @param type Type of the emergency
      * @param callerName Name of the person who called in the emergency.
      * @param callerPhone Phone number of the caller.
      * @param location Location of the emergency.
      */
-    public Emergency(int id, String type, String callerName, String callerPhone, String location) {
-        this.id = id;
+    public Emergency(String type, String callerName, String callerPhone, String location) {
         this.type = type;
         this.callerName = callerName;
         this.callerPhone = callerPhone;
@@ -44,7 +46,7 @@ public class Emergency {
     }
     
     /**
-     * Constructor for the Emergency method.
+     * Full constructor for the Emergency object.
      * @param id Identification number.
      * @param type Type of the emergency.
      * @param callerName Name of the person who called in the emergency.
@@ -53,9 +55,10 @@ public class Emergency {
      * @param resolved whether or not the emergency has been resolved.
      * @param dateCreated the date the emergency was created.
      * @param dateResolved the date the emergency was resolved.
+     * @param responderId the id number for the responder.
      */
     public Emergency(int id, String type, String callerName, String callerPhone, String location,
-                     int resolved, DateTime dateCreated, DateTime dateResolved) {
+                     int resolved, DateTime dateCreated, DateTime dateResolved, int responderId) {
         this.id = id;
         this.type = type;
         this.callerName = callerName;
@@ -64,8 +67,12 @@ public class Emergency {
         this.resolved = (resolved == 1);
         this.dateCreated = dateCreated;
         this.dateResolved = dateResolved;
+        this.responder = DatabaseSetup.findResponderById(responderId);
     }
     
+    public static void initializeIndex(){
+        DatabaseSetup.getHighestId("Emergency");
+    }
     public int getId() {
         return id;
     }
@@ -92,7 +99,20 @@ public class Emergency {
     
     public void resolved() {
         resolved = true;
-        // save object to database
+        dateResolved = DateTime.now();
+        save();
+    }
+    
+    public DateTime getDateCreated() {
+        return dateCreated;
+    }
+    
+    public DateTime getDateResolved() {
+        return dateResolved;
+    }
+    
+    public void assignResponder(Responder responder) {
+        this.responder = responder;
     }
     
     @Override
@@ -104,11 +124,26 @@ public class Emergency {
     public String insertString() {
         return id + ", '" + type + "', '" + callerName + "', '" + callerPhone + "', '" + location + "', " +
                (resolved? 1 : 0) + ", '" + dateCreated.toString() + "', '" +
-               ((dateResolved != null)? dateResolved.toString() : "") + "'";
+               ((dateResolved != null)? dateResolved.toString() : "") + "', " + responder.getId();
+    }
+    
+    public String reportString() {
+        String dateCreatedString = dtf.print(dateCreated);
+        String dateResolvedString;
+        if (dateResolved != null){
+            dateResolvedString = dtf.print(dateResolved);
+        } else {
+            dateResolvedString = "N/A";
+        }
+        return id + ", " + type + ", " + callerName + ", " + callerPhone + ", " + location + ", " +
+               (resolved? "yes" : "no") + ", " + dateCreatedString + ", " + dateResolvedString +
+               ", " + responder.getName();
     }
     
     public void save() {
+        id = ++index;
         DatabaseSetup.saveEmergency(this);
+        System.out.println("Emergency " + id + " created");
     }
    
 }

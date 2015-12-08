@@ -35,6 +35,7 @@ public class DatabaseSetup {
         }
         System.out.println("Connected to databse successfully");
     }
+    
     /**
      * Drop the database tables
      */
@@ -50,6 +51,7 @@ public class DatabaseSetup {
             System.out.println("Unable to drop tables");
         }
     }
+    
     /**
      * Create database tables
      */
@@ -60,12 +62,14 @@ public class DatabaseSetup {
             String sql = "CREATE TABLE IF NOT EXISTS EMERGENCY " +
                          "(ID INT PRIMARY KEY     NOT NULL, " +
                          " TYPE           INT     NOT NULL, " +
-                         " CALLER_NAME     TEXT, " +
-                         " CALLER_PHONE    TEXT, " +
+                         " CALLER_NAME    TEXT, " +
+                         " CALLER_PHONE   TEXT, " +
                          " LOCATION       TEXT, " +
                          " RESOLVED       INT    NOT NULL, " +
-                         " DATE_CREATED    TEXT, " +
-                         " DATE_RESOLVED   TEXT)";
+                         " DATE_CREATED   TEXT, " +
+                         " DATE_RESOLVED  TEXT, " +
+                         " RESPONDER_ID   INT, " +
+                         " FOREIGN KEY (RESPONDER_ID) REFERENCES RESPONDER)";
             sqlStatement.executeUpdate(sql);
             sqlStatement.close();
         } catch (Exception e){
@@ -91,7 +95,7 @@ public class DatabaseSetup {
      * Insert default responders into the database
      * @param responder responder to be inserted into the database.
      */
-    public static void initializeResponders (Responder responder) {
+    public static void saveResponder (Responder responder) {
         // Try to insert responders.
         try {
             Statement sqlStatement = connection.createStatement();
@@ -112,7 +116,7 @@ public class DatabaseSetup {
         try {
             Statement sqlStatement = connection.createStatement();
             String sql = "INSERT INTO EMERGENCY (ID,TYPE,CALLER_NAME,CALLER_PHONE,LOCATION,"
-                    + "RESOLVED,DATE_CREATED,DATE_RESOLVED) " +
+                    + "RESOLVED,DATE_CREATED,DATE_RESOLVED, RESPONDER_ID) " +
                   "VALUES (" + emergency.insertString() + ");";
             sqlStatement.executeUpdate(sql);
             sqlStatement.close();
@@ -150,7 +154,7 @@ public class DatabaseSetup {
      * @param type the type of responder to search for.
      * @return an ArrayList of the responders with the type.
      */
-    public static ArrayList<Responder> findAllResponderByType (String type) {
+    public static ArrayList<Responder> findAllRespondersByType (String type) {
         ArrayList<Responder> responderList = new ArrayList<>();
         try {
             Statement sqlStatement = connection.createStatement();
@@ -172,6 +176,7 @@ public class DatabaseSetup {
             return null;
         }
     }
+    
     /**
      * Find an emergency given the id
      * @param id the id of the emergency to find
@@ -199,7 +204,8 @@ public class DatabaseSetup {
                                                 result.getString("location"),
                                                 result.getInt("resolved"),
                                                 new DateTime(result.getString("date_created")),
-                                                dateResolved);
+                                                dateResolved,
+                                                result.getInt("responder_id"));
             result.close();
             sqlStatement.close();
             return emergency;
@@ -210,13 +216,19 @@ public class DatabaseSetup {
         }
     }
     
-    public static ArrayList<Emergency> findAllEmergencyByType (String type) {
+    /**
+     * Query the database for all emergencies of a given type.
+     * @param type the emergency type to query for.
+     * @return a list of all the emergencies of the given type.
+     */
+    public static ArrayList<Emergency> findAllEmergenciesByType (String type) {
         ArrayList<Emergency> emergencyList = new ArrayList<>();
         try {
             Statement sqlStatement = connection.createStatement();
             String sql = "SELECT * FROM EMERGENCY WHERE EMERGENCY.Type like '" + type + "';";
             ResultSet result = sqlStatement.executeQuery(sql);
             while (result.next()){
+                // Ensure the dateResolve will be valid
                 String dateResolvedString = result.getString("date_resolved");
                 DateTime dateResolved;
                 if (dateResolvedString.isEmpty()){
@@ -232,7 +244,8 @@ public class DatabaseSetup {
                                                     result.getString("location"),
                                                     result.getInt("resolved"),
                                                     new DateTime(result.getString("date_created")),
-                                                    dateResolved);
+                                                    dateResolved,
+                                                    result.getInt("responder_id"));
                 emergencyList.add(emergency);
             }
             result.close();
@@ -242,6 +255,102 @@ public class DatabaseSetup {
             System.out.println("Unable to find emergency with type: " + type);
             System.out.println(e);
             return null;
+        }
+    }
+    
+    /**
+     * Query the emergency table for all rows with the corresponding responder id.
+     * @param responderId the id number of the responder to search for.
+     * @return A list of emergencies for the given responder.
+     */
+    public static ArrayList<Emergency> findAllEmergenciesByResponder (int responderId) {
+        ArrayList<Emergency> emergencyList = new ArrayList<>();
+        try {
+            Statement sqlStatement = connection.createStatement();
+            String sql = "SELECT * FROM EMERGENCY WHERE EMERGENCY.RESPONDER_ID = " + responderId + ";";
+            ResultSet result = sqlStatement.executeQuery(sql);
+            while (result.next()){
+                // Ensure the dateResolve will be valid
+                String dateResolvedString = result.getString("date_resolved");
+                DateTime dateResolved;
+                if (dateResolvedString.isEmpty()){
+                    dateResolved = null;
+                } else {
+                    dateResolved = new DateTime(dateResolvedString);
+                }
+
+                Emergency emergency = new Emergency(result.getInt("id"),
+                                                    result.getString("type"),
+                                                    result.getString("caller_name"),
+                                                    result.getString("caller_phone"),
+                                                    result.getString("location"),
+                                                    result.getInt("resolved"),
+                                                    new DateTime(result.getString("date_created")),
+                                                    dateResolved,
+                                                    result.getInt("responder_id"));
+                emergencyList.add(emergency);
+            }
+            result.close();
+            sqlStatement.close();
+            return emergencyList;
+        } catch (Exception e) {
+            System.out.println("Unable to find any emergencies for the given responder");
+            System.out.println(e);
+            return null;
+        }
+    }
+    
+    /**
+     * Find all emergencies in the database.
+     * @return an ArrayList of all the emergencies.
+     */
+    public static ArrayList<Emergency> findAllEmergencies () {
+        ArrayList<Emergency> emergencyList = new ArrayList<>();
+        try {
+            Statement sqlStatement = connection.createStatement();
+            String sql = "SELECT * FROM EMERGENCY;";
+            ResultSet result = sqlStatement.executeQuery(sql);
+            while (result.next()){
+                // Ensure the dateResolved is valid for the emergency
+                String dateResolvedString = result.getString("date_resolved");
+                DateTime dateResolved;
+                if (dateResolvedString.isEmpty()){
+                    dateResolved = null;
+                } else {
+                    dateResolved = new DateTime(dateResolvedString);
+                }
+
+                Emergency emergency = new Emergency(result.getInt("id"),
+                                                    result.getString("type"),
+                                                    result.getString("caller_name"),
+                                                    result.getString("caller_phone"),
+                                                    result.getString("location"),
+                                                    result.getInt("resolved"),
+                                                    new DateTime(result.getString("date_created")),
+                                                    dateResolved,
+                                                    result.getInt("responder_id"));
+                emergencyList.add(emergency);
+            }
+            result.close();
+            sqlStatement.close();
+            return emergencyList;
+        } catch (Exception e) {
+            System.out.println("Unable to find emergencies");
+            System.out.println(e);
+            return null;
+        }
+    }
+    
+    public static int getHighestId(String tableName) {
+        try {
+            Statement sqlStatement = connection.createStatement();
+            String sql = "SELECT MAX(ID) as id FROM " + tableName.toUpperCase() + ";";
+            ResultSet result = sqlStatement.executeQuery(sql);
+            return (result.getInt("id"));
+        } catch (Exception e) {
+            System.out.println("Unable to find index");
+            System.out.println(e);
+            return 0;
         }
     }
 }
