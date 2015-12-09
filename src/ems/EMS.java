@@ -5,11 +5,10 @@
  */
 package ems;
 
-import controllers.ReportController;
 import java.util.ArrayList;
 import models.Emergency;
 import models.Responder;
-import org.joda.time.DateTime;
+import views.Window;
 
 /**
  *
@@ -31,6 +30,9 @@ public class EMS {
         DatabaseSetup.dropTables();
         DatabaseSetup.createTables();
         initializeResponders();
+        
+        Window window = new Window();
+        
         try { 
             DatabaseSetup.connection.close();
         } catch (Exception e) {

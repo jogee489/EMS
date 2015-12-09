@@ -8,6 +8,7 @@ package controllers;
 import java.util.ArrayList;
 import java.util.List;
 import models.Emergency;
+import models.Responder;
 
 /**
  *
@@ -41,5 +42,15 @@ public class EmergencyController {
             }
         }
         return activeEmergencies;
+    }
+    
+    public List<Emergency> getActiveEmergenciesByResponder(Responder responder) {
+        ArrayList<Emergency> responderEmergencies = new ArrayList<>();
+        for (Emergency emergency : emergencyList) {
+            if (!emergency.isResolved() && emergency.getResponder().equals(responder)){
+                responderEmergencies.add(emergency);
+            }
+        }
+        return responderEmergencies;
     }
 }

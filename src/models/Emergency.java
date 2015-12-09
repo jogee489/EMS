@@ -111,6 +111,10 @@ public class Emergency {
         return dateResolved;
     }
     
+    public Responder getResponder() {
+        return responder;
+    }
+    
     public void assignResponder(Responder responder) {
         this.responder = responder;
     }

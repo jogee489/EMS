@@ -121,4 +121,8 @@ public class Responder {
         DatabaseSetup.saveResponder(this);
         System.out.println("Responder " + id + " created");
     }
+    
+    public boolean equals(Responder otherResponder) {
+        return(id == otherResponder.id);
+    }
 }
