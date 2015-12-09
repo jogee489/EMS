@@ -33,7 +33,6 @@ public class ResponderView extends javax.swing.JFrame {
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
-        bindingGroup = new org.jdesktop.beansbinding.BindingGroup();
 
         emergencyDetailsPanel = new javax.swing.JPanel();
         emergencyLocationDetailLabel = new javax.swing.JLabel();
@@ -72,8 +71,6 @@ public class ResponderView extends javax.swing.JFrame {
 
         emergencyTypeDetail.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Fire", "Criminal", "Medical", "Other" }));
 
-        org.jdesktop.beansbinding.Binding binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, jList1, org.jdesktop.beansbinding.ELProperty.create("${selectedElement.callerName}"), callerNameDetail, org.jdesktop.beansbinding.BeanProperty.create("text"));
-        bindingGroup.addBinding(binding);
 
         callerNameDetailLabel.setText("Caller Name");
 
@@ -272,8 +269,6 @@ public class ResponderView extends javax.swing.JFrame {
                 .addContainerGap())
         );
 
-        bindingGroup.bind();
-
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
@@ -378,6 +373,5 @@ public class ResponderView extends javax.swing.JFrame {
     private javax.swing.JButton reportEmergencyButton1;
     private javax.swing.JMenuItem responderViewMenuItem;
     private javax.swing.JMenu viewMenu;
-    private org.jdesktop.beansbinding.BindingGroup bindingGroup;
     // End of variables declaration//GEN-END:variables
 }

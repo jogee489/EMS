@@ -23,7 +23,6 @@ public class DispatchView extends javax.swing.JFrame {
     // Variables declaration  
     private DefaultListModel<Emergency> listModel = new DefaultListModel<>();
     private int index = 0;
-    private org.jdesktop.beansbinding.BindingGroup bindingGroup;
     private JList activeEmergencyList;
     // New emergency form
     private JTextField callerName = new JTextField();
