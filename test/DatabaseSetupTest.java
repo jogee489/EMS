@@ -22,27 +22,29 @@ public class DatabaseSetupTest {
     ResultSet result;
     
     @After
-    public void dropTables() {
-        DatabaseSetup.dropTables();
+    public void resetData() {
         DatabaseSetup.closeConnection();
+        System.out.println("*************************************");
     }
     
     @Test
     public void connectToDatabaseTest() {
+        System.out.println("connectToDatabaseTest");
         DatabaseSetup.connectToDatabase();
         assertNotNull(DatabaseSetup.connection);
     }
     
     @Test
     public void createTablesTest() {
+        System.out.println("createTablesTest");
         DatabaseSetup.connectToDatabase();
         DatabaseSetup.createTables();
         try {
              sqlStatement = connection.createStatement();
-             sql = "SELECT COUNT(*) as count FROM sqlite_master WHERE TYPE='TABLE' AND NAME='TABLENAME'";
+             sql = "SELECT COUNT(*) as count FROM sqlite_master WHERE TYPE like 'TABLE'";
              sqlStatement.executeQuery(sql);
              result = sqlStatement.executeQuery(sql);
-             assertEquals(result.getInt("count"), 2);
+             assertEquals(2,result.getInt("count"));
         } catch (Exception e) {
             assert(false);
         }
@@ -51,6 +53,7 @@ public class DatabaseSetupTest {
     
     @Test
     public void dropTablesTest() {
+        System.out.println("createTablesTest");
         DatabaseSetup.connectToDatabase();
         DatabaseSetup.createTables();
         DatabaseSetup.dropTables();
@@ -67,7 +70,9 @@ public class DatabaseSetupTest {
     
     @Test
     public void saveResponderValidTest() {
+        System.out.println("saveResponderValidTest");
         DatabaseSetup.connectToDatabase();
+        DatabaseSetup.dropTables();
         DatabaseSetup.createTables();
         Responder responder = new Responder("Fire", "FW Fire Department", "453 Main St. Fort Wayne IN 46818");
         DatabaseSetup.saveResponder(responder);
@@ -83,25 +88,10 @@ public class DatabaseSetupTest {
     }
     
     @Test
-    public void saveResponderInvalidTest() {
-        DatabaseSetup.connectToDatabase();
-        DatabaseSetup.createTables();
-        Responder responder = new Responder();
-        DatabaseSetup.saveResponder(responder);
-        try {
-             sqlStatement = connection.createStatement();
-             sql = "SELECT COUNT(*) as count FROM RESPONDER;";
-             sqlStatement.executeQuery(sql);
-             result = sqlStatement.executeQuery(sql);
-             assertEquals(result.getInt("count"), 0);
-        } catch (Exception e) {
-            assert(false);
-        }
-    }
-    
-    @Test
     public void saveEmergencyValidTest() {
+        System.out.println("saveEmergencyValidTest");
         DatabaseSetup.connectToDatabase();
+        DatabaseSetup.dropTables();
         DatabaseSetup.createTables();
         Emergency emergency = new Emergency("Fire", "Bob Dole", "555-555-5555",
                                             "5133 Truemper way Fort Wayne IN 46835");
@@ -111,7 +101,7 @@ public class DatabaseSetupTest {
              sql = "SELECT COUNT(*) as count FROM EMERGENCY;";
              sqlStatement.executeQuery(sql);
              result = sqlStatement.executeQuery(sql);
-             assertEquals(result.getInt("count"), 1);
+             assertEquals(1, result.getInt("count"));
         } catch (Exception e) {
             assert(false);
         }
@@ -119,7 +109,9 @@ public class DatabaseSetupTest {
     
     @Test
     public void saveEmergencyInvalidTest() {
+        System.out.println("saveEmergencyInvalidTest");
         DatabaseSetup.connectToDatabase();
+        DatabaseSetup.dropTables();
         DatabaseSetup.createTables();
         Emergency emergency = new Emergency();
         DatabaseSetup.saveEmergency(emergency);
@@ -128,7 +120,7 @@ public class DatabaseSetupTest {
              sql = "SELECT COUNT(*) as count FROM EMERGENCY;";
              sqlStatement.executeQuery(sql);
              result = sqlStatement.executeQuery(sql);
-             assertEquals(result.getInt("count"), 0);
+             assertEquals(0, result.getInt("count"));
         } catch (Exception e) {
             assert(false);
         }
@@ -136,7 +128,9 @@ public class DatabaseSetupTest {
     
     @Test
     public void findResponderByIdInDatabaseTest() {
+        System.out.println("findResponderByIdInDatabaseTest");
         DatabaseSetup.connectToDatabase();
+        DatabaseSetup.dropTables();
         DatabaseSetup.createTables();
         Responder responder = new Responder("Fire", "FW Fire Department", "453 Main St. Fort Wayne IN 46818");
         DatabaseSetup.saveResponder(responder);
@@ -146,7 +140,9 @@ public class DatabaseSetupTest {
     
     @Test
     public void findResponderByIdNotInDatabaseTest() {
+        System.out.println("findResponderByIdNotInDatabaseTest");
         DatabaseSetup.connectToDatabase();
+        DatabaseSetup.dropTables();
         DatabaseSetup.createTables();
         Responder responderResult = DatabaseSetup.findResponderById(4);
         assertNull(responderResult);
@@ -154,7 +150,9 @@ public class DatabaseSetupTest {
     
     @Test
     public void findAllResponderByTypeTest() {
+        System.out.println("findAllResponderByTypeTest");
         DatabaseSetup.connectToDatabase();
+        DatabaseSetup.dropTables();
         DatabaseSetup.createTables();
         ArrayList<Responder> responderList = new ArrayList<>();
         responderList.add(new Responder("Fire", "FW Fire Department", "453 Main St. Fort Wayne IN 46818"));
@@ -170,10 +168,14 @@ public class DatabaseSetupTest {
     
     @Test
     public void findEmergencyByIdInDatabaseTest() {
+        System.out.println("findEmergencyByIdInDatabaseTest");
         DatabaseSetup.connectToDatabase();
+        DatabaseSetup.dropTables();
         DatabaseSetup.createTables();
+        Responder responder = new Responder("Fire", "FW Fire Department", "453 Main St. Fort Wayne IN 46818");
         Emergency emergency = new Emergency("Fire", "Bob Dole", "555-555-5555",
                                             "5133 Truemper way Fort Wayne IN 46835");
+        emergency.assignResponder(responder);
         DatabaseSetup.saveEmergency(emergency);
         Emergency emergencyResult = DatabaseSetup.findEmergencyById(emergency.getId());
         assertNotNull(emergencyResult);
@@ -181,15 +183,20 @@ public class DatabaseSetupTest {
     
     @Test
     public void findEmergencyByIdNotInDatabaseTest() {
+        System.out.println("findEmergencyByIdNotInDatabaseTest");
         DatabaseSetup.connectToDatabase();
+        DatabaseSetup.dropTables();
         DatabaseSetup.createTables();
         Emergency emergencyResult = DatabaseSetup.findEmergencyById(4);
+        System.out.println(emergencyResult);
         assertNull(emergencyResult);
     }
     
     @Test
     public void findAllEmergenciesByTypeTest() {
+        System.out.println("findAllEmergenciesByTypeTest");
         DatabaseSetup.connectToDatabase();
+        DatabaseSetup.dropTables();
         DatabaseSetup.createTables();
         ArrayList<Emergency> emergencyList = new ArrayList<>();
         emergencyList.add(new Emergency("Fire", "Bob Dole", "555-555-5555",
@@ -209,7 +216,9 @@ public class DatabaseSetupTest {
     
     @Test
     public void findAllEmergencyByResponderTest() {
+        System.out.println("findAllEmergencyByResponderTest");
         DatabaseSetup.connectToDatabase();
+        DatabaseSetup.dropTables();
         DatabaseSetup.createTables();
         Responder responder = new Responder("Fire", "FW Fire Department", "453 Main St. Fort Wayne IN 46818");
         responder.save();
@@ -234,7 +243,9 @@ public class DatabaseSetupTest {
     
     @Test
     public void findAllEmergenciesTest() {
+        System.out.println("findAllEmergenciesTest");
         DatabaseSetup.connectToDatabase();
+        DatabaseSetup.dropTables();
         DatabaseSetup.createTables();
         ArrayList<Emergency> emergencyList = new ArrayList<>();
         emergencyList.add(new Emergency("Fire", "Bob Dole", "555-555-5555",
@@ -254,15 +265,19 @@ public class DatabaseSetupTest {
     
     @Test
     public void getHighestIndexNoRowsInTableTest() {
+        System.out.println("getHighestIndexNoRowsInTableTest");
         DatabaseSetup.connectToDatabase();
+        DatabaseSetup.dropTables();
         DatabaseSetup.createTables();
-        int index = DatabaseSetup.getHighestId("Emergency");
+        int index = DatabaseSetup.getHighestId("Responder");
         assertEquals(0, index);
     }
     
     @Test
     public void getHighestIndexWithRowsInTableTest() {
+        System.out.println("getHighestIndexWithRowsInTableTest");
         DatabaseSetup.connectToDatabase();
+        DatabaseSetup.dropTables();
         DatabaseSetup.createTables();
         ArrayList<Emergency> emergencyList = new ArrayList<>();
         emergencyList.add(new Emergency("Fire", "Bob Dole", "555-555-5555",

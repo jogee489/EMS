@@ -26,7 +26,6 @@ public class DatabaseSetup {
     public static void connectToDatabase() {
         String url = "jdbc:sqlite:ems";
 
-        System.out.println("Connecting database...");
         try {
             Class.forName("org.sqlite.JDBC");
             connection = DriverManager.getConnection(url);
@@ -34,7 +33,6 @@ public class DatabaseSetup {
             System.out.println(e.getClass().getName() + ": " + e.getMessage());
             connection = null;
         }
-        System.out.println("Connected to databse successfully");
     }
     
     /**
@@ -54,12 +52,14 @@ public class DatabaseSetup {
         try (Statement sqlStatement = connection.createStatement()) {
             String drop = "DROP TABLE IF EXISTS EMERGENCY";
             sqlStatement.execute(drop);
-            System.out.println("Dropped table: Emergency" );
             drop = "DROP TABLE IF EXISTS RESPONDER";
             sqlStatement.execute(drop);
-            System.out.println("Dropped table: Responder" ); 
+            System.out.println("Dropped tables"); 
+            Emergency.index = 0;
+            Responder.index = 0;
         } catch (Exception e) {
             System.out.println("Unable to drop tables");
+            System.out.println(e);
         }
     }
     
@@ -82,7 +82,6 @@ public class DatabaseSetup {
                          " RESPONDER_ID   INT, " +
                          " FOREIGN KEY (RESPONDER_ID) REFERENCES RESPONDER)";
             sqlStatement.executeUpdate(sql);
-            sqlStatement.close();
         } catch (Exception e){
             System.out.println("Unable to create EMERGENCY table");
             System.out.println(e.toString());
@@ -94,7 +93,7 @@ public class DatabaseSetup {
                          "(ID INT PRIMARY KEY     NOT NULL, " +
                          " TYPE           TEXT    NOT NULL, " + 
                          " NAME           TEXT    NOT NULL, " +
-                         " LOCATION       TEXT)";
+                         " LOCATION       TEXT    NOT NULL) ";
             sqlStatement.executeUpdate(sql);
             sqlStatement.close();
         } catch (Exception e){

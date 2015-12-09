@@ -122,9 +122,12 @@ public class Emergency {
     }
 
     public String insertString() {
+        String responderText = "0";
+        if(responder != null)
+            responderText = "" + responder.getId();
         return id + ", '" + type + "', '" + callerName + "', '" + callerPhone + "', '" + location + "', " +
                (resolved? 1 : 0) + ", '" + dateCreated.toString() + "', '" +
-               ((dateResolved != null)? dateResolved.toString() : "") + "', " + responder.getId();
+               ((dateResolved != null)? dateResolved.toString() : "") + "', " + responderText;
     }
     
     public String reportString() {
@@ -137,7 +140,7 @@ public class Emergency {
         }
         return id + ", " + type + ", " + callerName + ", " + callerPhone + ", " + location + ", " +
                (resolved? "yes" : "no") + ", " + dateCreatedString + ", " + dateResolvedString +
-               ", " + responder.getName();
+               ", " + responder == null? "" : responder.getName();
     }
     
     public void save() {
