@@ -32,10 +32,21 @@ public class DatabaseSetup {
             connection = DriverManager.getConnection(url);
         } catch (Exception e) {
             System.out.println(e.getClass().getName() + ": " + e.getMessage());
+            connection = null;
         }
         System.out.println("Connected to databse successfully");
     }
     
+    /**
+     * Close connection to the sqlite database
+     */
+    public static void closeConnection() {
+        try {
+            connection.close();
+        } catch (Exception e) {
+            System.out.println("Unable to close database connection");
+        }
+    }
     /**
      * Drop the database tables
      */

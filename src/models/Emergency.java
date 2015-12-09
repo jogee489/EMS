@@ -141,7 +141,7 @@ public class Emergency {
     }
     
     public void save() {
-        id = ++index;
+        if(id == 0) id = ++index;
         DatabaseSetup.saveEmergency(this);
         System.out.println("Emergency " + id + " created");
     }
