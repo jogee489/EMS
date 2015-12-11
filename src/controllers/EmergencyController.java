@@ -1,14 +1,13 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package controllers;
 
 import java.util.ArrayList;
 import java.util.List;
+import javax.swing.DefaultListModel;
+
+import views.DispatchView;
+import views.ResponderView;
+
 import models.Emergency;
-import models.Responder;
 
 /**
  *
@@ -16,20 +15,40 @@ import models.Responder;
  */
 public class EmergencyController {
     private Emergency emergencyInstance;
-    private ArrayList<Emergency> emergencyList = new ArrayList<>();
-    private int idCounter = 0;
     
+    private ArrayList<Emergency> emergencyList = new ArrayList<Emergency>();
+    private int idCounter = 0;
+
+    // dispatch
+    private DispatchView dispatch;
+    private ResponderView responder;
     
     public Emergency createEmergency(String type, String callerName, String callerPhone, String location) {
         emergencyInstance = new Emergency(type, callerName, callerPhone, location);
-        emergencyList.add(emergencyInstance);
+        addEmergency(emergencyInstance);
+        dispatch.updateCurrentEmergenciesList(emergencyList);
+        responder.updateCurrentEmergenciesList(emergencyList);
         return emergencyInstance;
+    }
+    
+    
+    
+    public void addEmergency(Emergency emergency) {
+    	emergencyList.add(emergency);
     }
     
     public List<Emergency> getEmergencies() {
         return emergencyList;
     }
     
+    public void setDispatch(DispatchView dispatch) {
+    	this.dispatch = dispatch;
+    }
+    
+    public void setResponder(ResponderView responder) {
+    	this.responder = responder;
+    }	
+    	
     /**
      * Retrieve a list of all the emergencies that haven't been resolved.
      * @return List of all the active emergencies.
@@ -44,13 +63,4 @@ public class EmergencyController {
         return activeEmergencies;
     }
     
-    public List<Emergency> getActiveEmergenciesByResponder(Responder responder) {
-        ArrayList<Emergency> responderEmergencies = new ArrayList<>();
-        for (Emergency emergency : emergencyList) {
-            if (!emergency.isResolved() && emergency.getResponder().equals(responder)){
-                responderEmergencies.add(emergency);
-            }
-        }
-        return responderEmergencies;
-    }
 }

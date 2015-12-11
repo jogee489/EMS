@@ -1,5 +1,7 @@
 package views;
 
+import controllers.EmergencyController;
+
 import javax.swing.*;
 import java.awt.CardLayout;
 import java.awt.event.*;
@@ -7,8 +9,7 @@ import java.awt.event.*;
 /*
  * This is the main window, consisting of a JFrame with an upper panel and drop menu.
  * The views are panels that are added to the frame and are instantiated here. 
- * The contoller for the views is attached to the drop menu. When the selected view is changed, 
- * the selected view should be displayed.
+ * When a view is selected on the drop menu, the selected view is displayed.
  */
 public class Window extends JFrame {
 	public static final int WINDOW_WIDTH = 1000;
@@ -19,7 +20,10 @@ public class Window extends JFrame {
 	// instantiate the three views
 	private static final DispatchView DISPATCH_VIEW = new DispatchView();
 	private static final ResponderView RESPONDER_VIEW = new ResponderView();
-	private static final AdminView ADMIN_VIEW = new AdminView();
+	public static final AdminView ADMIN_VIEW = new AdminView();
+	
+	// emergency controller
+	public static final EmergencyController EMERGENCY_CONTROLLER = new EmergencyController();
 	
 	private JPanel mainPanel;
 	
@@ -45,6 +49,9 @@ public class Window extends JFrame {
 		menuBar.add(viewMenu);
 		setJMenuBar(menuBar);
 		
+                EMERGENCY_CONTROLLER.setDispatch(DISPATCH_VIEW);
+                EMERGENCY_CONTROLLER.setResponder(RESPONDER_VIEW);
+                
 		// views
 		mainPanel = new JPanel(new CardLayout());
 		mainPanel.add(DISPATCH_VIEW, VIEW_NAMES[0]);

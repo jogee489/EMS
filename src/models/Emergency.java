@@ -126,7 +126,7 @@ public class Emergency {
     }
 
     public String insertString() {
-        String responderText = "0";
+        String responderText = "1";
         if(responder != null)
             responderText = "" + responder.getId();
         return id + ", '" + type + "', '" + callerName + "', '" + callerPhone + "', '" + location + "', " +

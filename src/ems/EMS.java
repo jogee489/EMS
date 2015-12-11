@@ -30,14 +30,10 @@ public class EMS {
         DatabaseSetup.dropTables();
         DatabaseSetup.createTables();
         initializeResponders();
+        initializeEmergencies();
         
         Window window = new Window();
         
-        try { 
-            DatabaseSetup.connection.close();
-        } catch (Exception e) {
-            System.out.println("Unable to close connection");
-        }
     }
     public static void initializeResponders() {
         // Create the initial list of responders.
@@ -53,6 +49,24 @@ public class EMS {
         
         for (Responder responder : responderList) {
             responder.save();
+        }
+    }
+    
+    public static void initializeEmergencies() {
+        ArrayList<Emergency> emergencyList = new ArrayList<>();
+        emergencyList.add(new Emergency("Fire", "Bob Dole", "555-555-5555",
+                                            "5133 Truemper way Fort Wayne IN 46835"));
+        emergencyList.add(new Emergency("Crime", "Bob Dole", "555-555-5555",
+                                            "5133 Truemper way Fort Wayne IN 46835"));
+        emergencyList.add(new Emergency("Fire", "Bob Dole", "555-555-5555",
+                                            "5133 Truemper way Fort Wayne IN 46835"));
+        emergencyList.add(new Emergency(6, "Medical", "Bob Dole", "555-555-5555",
+                                            "5133 Truemper way Fort Wayne IN 46835", 1,
+                                            Emergency.dtf.parseDateTime("04/02/2011"),
+                                            Emergency.dtf.parseDateTime("04/03/2011"),
+                                            1));
+        for (Emergency emergency : emergencyList){
+            emergency.save();
         }
     }
 }

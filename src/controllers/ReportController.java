@@ -6,11 +6,14 @@
 package controllers;
 
 import ems.DatabaseSetup;
+import java.io.File;
 import java.io.FileWriter;
 import java.util.ArrayList;
+import javax.swing.JFileChooser;
 import models.Emergency;
 import org.joda.time.DateTime;
 import org.joda.time.Interval;
+import views.Window;
 
 /**
  *
@@ -75,18 +78,22 @@ public class ReportController {
      */
     private static void generateEmergencyCsvFile(ArrayList<Emergency> emergencyList) {
         try {
-            String filename = "report.csv";
-            FileWriter writer = new FileWriter(filename);
-            // header of the csv file
-            writer.append("ID, Type, Caller Name, Caller Phone, Location, Resolved, " +
-                          "Date Created, Date Resolved, Responder Name");
-            for (Emergency instance : emergencyList) {
-                writer.append('\n');
-                writer.append(instance.reportString());
+            JFileChooser fileChooser = new JFileChooser();
+            int result = fileChooser.showSaveDialog(Window.ADMIN_VIEW);
+            if (result == JFileChooser.APPROVE_OPTION) {
+                File fileToSave = fileChooser.getSelectedFile();
+                FileWriter writer = new FileWriter(fileToSave);
+                // header of the csv file
+                writer.append("ID, Type, Caller Name, Caller Phone, Location, Resolved, " +
+                              "Date Created, Date Resolved, Responder Name");
+                for (Emergency instance : emergencyList) {
+                    writer.append('\n');
+                    writer.append(instance.reportString());
+                }
+                writer.flush();
+                writer.close();
+                System.out.println("Created report");
             }
-            writer.flush();
-            writer.close();
-            System.out.println("Created report: " + filename);
             
         } catch (Exception e) {
             System.out.println("Unable to create csv: " + e);
